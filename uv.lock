@@ -13,6 +13,7 @@ dependencies = [
     { name = "guardrails-ai" },
     { name = "guardrails-api-client" },
     { name = "pydantic" },
+    { name = "python-dotenv" },
 ]
 
 [package.metadata]
@@ -20,6 +21,7 @@ requires-dist = [
     { name = "guardrails-ai", specifier = "==0.6.0" },
     { name = "guardrails-api-client", specifier = "==0.4.0a1" },
     { name = "pydantic", specifier = ">=2.10.2" },
+    { name = "python-dotenv", specifier = ">=1.0.1" },
 ]
 
 [[package]]
