@@ -1,10 +1,21 @@
-from python:3.12-alpine
+FROM python:3.12-alpine
 
-RUN apk add bash curl nano 
+ARG token
+ENV TOKEN=${token}
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
-WORKDIR /home/projeto
+RUN apk add git bash
 
-RUN git clone https://github.com/Ficheles/e-prompt-exam.git
-RUN pip install uv && uv venv && source .venv/bin/activate && uv sync
+WORKDIR /home
 
-CMD ['python', 'main.py']
+RUN git clone https://github.com/Ficheles/e-prompt-exam.git .
+
+RUN pip install uv && \
+   uv venv && \
+   source .venv/bin/activate && \
+   uv add guardrails-api-client==0.4.0a1 && \
+   uv add guardrails-ai==0.6.0 && \
+   guardrails configure --disable-metrics --disable-remote-inferencing --token ${TOKEN} && \
+   guardrails hub install hub://guardrails/contains_string
+
+CMD [ "python", "main.py" ]
