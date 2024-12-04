@@ -1,32 +1,47 @@
-from prompt import PROMPT, categorias
 from guardrails import Guard
-from guardrails.hub import ContainsString
+from prompt import HAPPY_CATEGORIAS_PROMPT, UNHAPPY_CATEGORIAS_PROMPT, PERSONA, create_prompt
 from guard import CSVOutput
 from dotenv import load_dotenv
+import csv
 
 load_dotenv()
 
-guard = Guard.for_pydantic(output_class=CSVOutput)
+def read_csv_to_string(file_path):
+    """Abre um arquivo CSV e retorna seu conteúdo como uma string."""
+    with open(file_path, mode='r', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        content = '\n'.join([','.join(row) for row in reader])
+    return content
 
-res = guard(
-    model="gpt-4o-mini",
-    messages=[{
-        "role": "user",
-        "content": PROMPT
-    }]
-)
-
-print(f"{res.validated_output}")
-
-res.validated_output['data'].append({
-    'date': '2024-11-15',
-    'title': 'Supermercado Central',
-    'amount': 250.75,
-    'category': 'teste_fail'})
-
-for line in res.validated_output['data']:
-    guard = Guard().use(ContainsString, substring=line['category'], on_fail="exception")
+def run(categorias, dados_fatura):
+    prompt = create_prompt(categorias,dados_fatura)
+    guard = Guard.for_pydantic(output_class=CSVOutput)
     try:
-        guard.validate(','.join(categorias))
+        guard(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": PERSONA, 
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+        print('Tudo Passou!!!\n')
     except Exception as e:
         print(e)
+
+if __name__ == '__main__':
+    fatura = read_csv_to_string('gastos_cartao_credito.csv')
+
+    print('\nIniciando Happy Test :)')
+    run(HAPPY_CATEGORIAS_PROMPT, fatura)
+
+    input('\n\nAperte enter para continuar')
+    
+    print('\nIniciando Unhappy Test :)')
+    run(UNHAPPY_CATEGORIAS_PROMPT, fatura)
+
