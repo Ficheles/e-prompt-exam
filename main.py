@@ -17,7 +17,7 @@ def run(categorias, dados_fatura):
     prompt = create_prompt(categorias,dados_fatura)
     guard = Guard.for_pydantic(output_class=CSVOutput)
     try:
-        guard(
+        result = guard(
             model="gpt-4o-mini",
             messages=[
                 {
