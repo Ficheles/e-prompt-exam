@@ -37,13 +37,14 @@ date, title, amount
 TIPAGEM_UNHAPPY = '''
 Se você não achar alguma categoria pertinente, coloque ´INDEFINIDO´
 Sua resposta deve ser OBRIGATORIAMENTE a lista em formato json sem ´´´json com base em:
-class LineOutput(BaseModel):
-    category: str = Field(validators=[ValidadorCategorias()])
+<tipagem>
+data: [
+    category: str
     date: str
     title: str
     amount: float
-class CSVOutput(BaseModel):
-    data: List[LineOutput]
+]
+</tipagem>
 '''
 
 HAPPY_CATEGORIAS_PROMPT = '<categorias>' + ','.join(list_categorias) + '</categorias>'

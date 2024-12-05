@@ -35,7 +35,7 @@ class ValidadorCategorias(Validator):
     def _validate(self, value: str, metadata: Dict) -> ValidationResult:
         if value.lower() not in self.categorias:
             result = FailResult(
-                error_message=f"\nCategoria atribuída pelo modelo não é uma categoria permitida.\nCategoria atribuída: {value}",
+                error_message=f"\nCategoria atribuída: {value}",
             )
         else:
             result = PassResult()
