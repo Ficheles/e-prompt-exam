@@ -21,7 +21,7 @@ def happy_test(prompt):
     print('\nIniciando HappyTest :)\n')
     guard = Guard.for_pydantic(output_class=CSVOutput)
     try:
-        guard(
+        res = guard(
             model="gpt-4o-mini",
             messages=[
                 {
@@ -37,6 +37,10 @@ def happy_test(prompt):
         print('Tudo Passou!!!')
     except ValidationError as e:
         print(e)
+    for i in res.validated_output['data']:
+        print('Categoria: ',i['category'])
+        print('Title: ', i['title'], '\n')
+    return res
 
 
 def unhappy_test(client: OpenAI, prompt: str):
