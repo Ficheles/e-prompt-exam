@@ -37,8 +37,18 @@ Para configurar e executar o E-Prompt, siga os passos abaixo:
 Execute os seguintes comandos no terminal:
 
 ```sh
-docker build --build-arg token=<YOUR-GUARDRAILS_KEY> -t e-prompt .
-docker run -it -e OPENAI_API_KEY=<YOUR-OPENAI_API_KEY> e-prompt
+
+# Salvar sua chave openai no ambiente
+export OPENAI_API_KEY=<YOUR-OPENAI-API-KEY>
+
+# Salvar seu token guardrails no ambiente
+export GUARDRAILS_TOKEN=<YOUR-GUARDRAILS-TOKEN>
+
+# Fazer o guild da sua imagem docker utilizando GUARDRAILS_TOKEN
+docker build --build-arg token=$GUARDRAILS_TOKEN -t e-prompt .
+
+# Criar seu container docker utilizando sua chave openai
+docker run -it -e OPENAI_API_KEY=$OPENAI_API_KEY e-prompt
 ```
 
 Substitua `<YOUR-GUARDRAILS_KEY>` e `<YOUR-OPENAI_API_KEY>` pelas chaves apropriadas.
