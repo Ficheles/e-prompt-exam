@@ -14,18 +14,8 @@ from guardrails.validators import (
 
 load_dotenv()
 
-class LineInput(BaseModel):
-    date: str
-    title: str
-    amount: float
-
-
-class CsvInput(BaseModel):
-    data: List[LineInput]
-
-
 @register_validator(name="validador-categorias", data_type="string")
-class ValidadorCategorias(Validator):
+class ValidadorCategorias(Validator): 
     def __init__(self,
                  categorias_a_validar: List[str] = None,
                  on_fail: Optional[Callable] = None):
